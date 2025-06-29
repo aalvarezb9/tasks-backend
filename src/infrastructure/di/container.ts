@@ -1,0 +1,21 @@
+import 'reflect-metadata';
+import { container } from 'tsyringe';
+import { TaskRepository } from '../../domain/repositories/TaskRepository';
+import { UserRepository } from '../../domain/repositories/UserRepository';
+import { FirestoreTaskRepository } from '../persistence/firestore/FirestoreTaskRepository';
+import { FirestoreUserRepository } from '../persistence/firestore/FirestoreUserRepository';
+import { CreateTaskUseCase } from '../../application/usecases/task/CreateTaskUseCase';
+import { UpdateTaskUseCase } from '../../application/usecases/task/UpdateTaskUseCase';
+import { DeleteTaskUseCase } from '../../application/usecases/task/DeleteTaskUseCase';
+import { GetTasksUseCase } from '../../application/usecases/task/GetTasksUseCase';
+import { CreateUserUseCase } from '../../application/usecases/user/CreateUserUseCase';
+import { FindUserUseCase } from '../../application/usecases/user/FindUserUseCase';
+
+container.registerSingleton<TaskRepository>('TaskRepository', FirestoreTaskRepository);
+container.registerSingleton<UserRepository>('UserRepository', FirestoreUserRepository);
+container.registerSingleton(CreateTaskUseCase);
+container.registerSingleton(UpdateTaskUseCase);
+container.registerSingleton(DeleteTaskUseCase);
+container.registerSingleton(GetTasksUseCase);
+container.registerSingleton(CreateUserUseCase);
+container.registerSingleton(FindUserUseCase);
