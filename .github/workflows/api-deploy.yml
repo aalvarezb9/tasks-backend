@@ -2,40 +2,48 @@ name: API CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   backend:
     runs-on: ubuntu-latest
     env:
+      NODE_VERSION: 20
       PROJECT_ID: tasks-collection-82ded
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa.json
+      GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Write service-account
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$GOOGLE_APPLICATION_CREDENTIALS"
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Add GC creds to environment for next steps
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS" >> $GITHUB_ENV
+      - name: Write service account key
+        env:
+            FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KET }}
+        run: echo "$FIREBASE_SERVICE_ACCOUNT_KEY" > firebase-service-account.json
 
       - name: Install Firebase CLI
         run: npm i -g firebase-tools
 
-      - name: Install deps & build
-        run: |
-          npm ci
-          npm run build
-
       - name: Set runtime secret
-        run: |
-          firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID
+        run: firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID --token "${{ secrets.FIREBASE_CI_TOKEN }}"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
 
       - name: Deploy Cloud Functions
-        run: |
-          firebase deploy --only functions --project $PROJECT_ID --non-interactive
+        run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}"

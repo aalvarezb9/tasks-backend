@@ -1,6 +1,7 @@
 import admin from 'firebase-admin';
-import { getApps } from 'firebase-admin/app';
+import { getApps, ServiceAccount } from 'firebase-admin/app';
 import fs from 'fs';
+
 
 function init() {
   if (process.env.FUNCTIONS_EMULATOR !== 'true' && process.env.K_SERVICE) {
