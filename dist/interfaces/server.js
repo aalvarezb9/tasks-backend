@@ -13,6 +13,6 @@ const ErrorMiddleware_1 = require("./http/middlewares/ErrorMiddleware");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use('/api', routes_1.router);
+app.use('/', routes_1.router);
 app.use(ErrorMiddleware_1.errorMiddleware);
 exports.api = (0, https_1.onRequest)({ region: 'us-central1' }, app);

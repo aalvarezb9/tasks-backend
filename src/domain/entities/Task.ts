@@ -6,7 +6,7 @@ export type TaskStatus = 'pending' | 'in-progress' | 'completed';
 export interface TaskProps {
   title: string;
   description?: string;
-  category?: string;
+  categoryId?: string;
 }
 
 export class Task {
@@ -39,8 +39,8 @@ export class Task {
     return this.props.description;
   }
 
-  get category() {
-    return this.props.category;
+  get categoryId() {
+    return this.props.categoryId;
   }
 
   get status() {
@@ -63,5 +63,21 @@ export class Task {
     const ev = this._events;
     this._events = [];
     return ev;
+  }
+
+  static hydrate(
+    id: string,
+    props: TaskProps,
+    status: TaskStatus,
+    createdAt: string | Date,
+    updatedAt: string | Date
+  ) {
+    return new Task(
+      TaskId.from(id),
+      props,
+      status,
+      typeof createdAt === 'string' ? new Date(createdAt) : createdAt,
+      typeof updatedAt === 'string' ? new Date(updatedAt) : updatedAt
+    );
   }
 }

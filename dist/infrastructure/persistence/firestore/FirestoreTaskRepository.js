@@ -31,17 +31,17 @@ class FirestoreTaskRepository {
     }
 }
 exports.FirestoreTaskRepository = FirestoreTaskRepository;
-const toDoc = (t) => ({
-    id: t.id.value,
-    title: t.title,
-    description: t.description,
-    category: t.category,
-    status: t.status,
-    createdAt: t.createdAt.toISOString(),
-    updatedAt: t.updatedAt.toISOString(),
-});
-const fromDoc = (d) => {
-    const t = Task_1.Task.create({ title: d.title, description: d.description, category: d.category });
-    t.update({ status: d.status });
-    return t;
+const toDoc = (t) => {
+    const doc = {
+        id: t.id.value,
+        title: t.title,
+        description: t.description,
+        status: t.status,
+        createdAt: t.createdAt.toISOString(),
+        updatedAt: t.updatedAt.toISOString(),
+    };
+    if (t.categoryId)
+        doc.categoryId = t.categoryId;
+    return doc;
 };
+const fromDoc = (d) => Task_1.Task.hydrate(d.id, { title: d.title, description: d.description, categoryId: d.categoryId }, d.status, d.createdAt, d.updatedAt);

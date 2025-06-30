@@ -18,7 +18,7 @@ export class UpdateTaskUseCase {
       id: task.id.value,
       title: task.title,
       description: task.description,
-      category: task.category,
+      categoryId: task.categoryId,
       status: task.status,
       createdAt: task.createdAt.toISOString(),
       updatedAt: task.updatedAt.toISOString(),

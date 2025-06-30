@@ -10,12 +10,19 @@ import { DeleteTaskUseCase } from '../../application/usecases/task/DeleteTaskUse
 import { GetTasksUseCase } from '../../application/usecases/task/GetTasksUseCase';
 import { CreateUserUseCase } from '../../application/usecases/user/CreateUserUseCase';
 import { FindUserUseCase } from '../../application/usecases/user/FindUserUseCase';
+import { FirestoreCategoryRepository } from '../persistence/firestore/FirestoreCategoryRepository';
+import { CategoryRepository } from '../../domain/repositories/CategoryRepository';
+import { CreateCategoryUseCase } from '../../application/usecases/category/CreateCategoryUseCase';
+import { UpdateCategoryUseCase } from '../../application/usecases/category/UpdateCategoryUseCase';
 
 container.registerSingleton<TaskRepository>('TaskRepository', FirestoreTaskRepository);
 container.registerSingleton<UserRepository>('UserRepository', FirestoreUserRepository);
+container.registerSingleton<CategoryRepository>('CategoryRepository', FirestoreCategoryRepository);
 container.registerSingleton(CreateTaskUseCase);
 container.registerSingleton(UpdateTaskUseCase);
 container.registerSingleton(DeleteTaskUseCase);
 container.registerSingleton(GetTasksUseCase);
 container.registerSingleton(CreateUserUseCase);
 container.registerSingleton(FindUserUseCase);
+container.registerSingleton(CreateCategoryUseCase);
+container.registerSingleton(UpdateCategoryUseCase);

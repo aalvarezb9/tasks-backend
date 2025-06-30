@@ -10,7 +10,6 @@ export class UserController {
   private static findUC = container.resolve(FindUserUseCase);
 
   @CatchErrors
-  @RequireAuth
   static async create(req: Request, res: Response) {
     const u = await this.createUC.execute(req.body);
     res.status(201).json(u);

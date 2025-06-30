@@ -6,10 +6,13 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "serve": "npm run build && functions-framework --target=api",
+    "watch:ts": "tsc -w --preserveWatchOutput",
+    "emul": "firebase emulators:start --only functions --project tasks-collection-82ded",
     "start": "ts-node-dev --respawn src/interfaces/server.ts",
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "dev": "concurrently -k -n COMP,EMU -c yellow,cyan \"npm:watch:ts\" \"npm:emul\"",
     "deploy": "npm run build && firebase deploy --only functions"
   },
   "keywords": [],

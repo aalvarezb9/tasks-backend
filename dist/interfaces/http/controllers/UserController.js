@@ -32,7 +32,6 @@ UserController.createUC = tsyringe_1.container.resolve(CreateUserUseCase_1.Creat
 UserController.findUC = tsyringe_1.container.resolve(FindUserUseCase_1.FindUserUseCase);
 __decorate([
     CatchErrors_1.CatchErrors,
-    RequireAuth_1.RequireAuth,
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

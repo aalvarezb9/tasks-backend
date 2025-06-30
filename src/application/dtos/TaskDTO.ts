@@ -1,9 +1,11 @@
+import { TaskStatus } from "../../domain/entities/Task";
+
 export interface TaskDTO {
   id: string;
   title: string;
   description?: string;
-  category?: string;
-  status: string;
+  categoryId?: string;
+  status: TaskStatus;
   createdAt: string;
   updatedAt: string;
 }

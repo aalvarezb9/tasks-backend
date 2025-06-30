@@ -12,15 +12,15 @@ router.get(
     query('limit').optional().isInt({ min: 1, max: 100 }),
     validationMiddleware,
   ],
-  TaskController.list
+  TaskController.list.bind(TaskController)
 );
 
 router.post(
   '/',
   [body('title').isString().notEmpty(), validationMiddleware],
-  TaskController.create
+  TaskController.create.bind(TaskController)
 );
 
-router.put('/:id', TaskController.update);
+router.put('/:id', TaskController.update.bind(TaskController));
 
-router.delete('/:id', TaskController.delete);
+router.delete('/:id', TaskController.delete.bind(TaskController));

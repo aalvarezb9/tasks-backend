@@ -18,7 +18,7 @@ export class GetTasksUseCase {
         id: t.id.value,
         title: t.title,
         description: t.description,
-        category: t.category,
+        categoryId: t.categoryId,
         status: t.status,
         createdAt: t.createdAt.toISOString(),
         updatedAt: t.updatedAt.toISOString(),

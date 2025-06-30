@@ -29,8 +29,8 @@ class Task {
     get description() {
         return this.props.description;
     }
-    get category() {
-        return this.props.category;
+    get categoryId() {
+        return this.props.categoryId;
     }
     get status() {
         return this._status;
@@ -48,6 +48,9 @@ class Task {
         const ev = this._events;
         this._events = [];
         return ev;
+    }
+    static hydrate(id, props, status, createdAt, updatedAt) {
+        return new Task(TaskId_1.TaskId.from(id), props, status, typeof createdAt === 'string' ? new Date(createdAt) : createdAt, typeof updatedAt === 'string' ? new Date(updatedAt) : updatedAt);
     }
 }
 exports.Task = Task;

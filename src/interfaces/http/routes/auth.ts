@@ -8,5 +8,5 @@ export const router = Router();
 router.post(
   '/login',
   [body('email').isEmail(), body('password').isString().isLength({ min: 6 }), validationMiddleware],
-  AuthController.login
+  AuthController.login.bind(AuthController)
 );

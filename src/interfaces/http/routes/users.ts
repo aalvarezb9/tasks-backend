@@ -5,9 +5,18 @@ import { validationMiddleware } from '../middlewares/ValidationMiddleware';
 
 export const router = Router();
 
-router.get('/', [query('email').isEmail(), validationMiddleware], UserController.find);
+router.get(
+  '/',
+  [query('email').isEmail(), validationMiddleware],
+  UserController.find.bind(UserController)
+);
 router.post(
   '/',
-  [body('email').isEmail(), body('name').isString().notEmpty(), validationMiddleware],
-  UserController.create
+  [
+    body('email').isEmail(),
+    body('name').isString().notEmpty(),
+    body('password').isString().notEmpty(),
+    validationMiddleware,
+  ],
+  UserController.create.bind(UserController)
 );

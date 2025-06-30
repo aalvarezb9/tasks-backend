@@ -10,11 +10,17 @@ const DeleteTaskUseCase_1 = require("../../application/usecases/task/DeleteTaskU
 const GetTasksUseCase_1 = require("../../application/usecases/task/GetTasksUseCase");
 const CreateUserUseCase_1 = require("../../application/usecases/user/CreateUserUseCase");
 const FindUserUseCase_1 = require("../../application/usecases/user/FindUserUseCase");
+const FirestoreCategoryRepository_1 = require("../persistence/firestore/FirestoreCategoryRepository");
+const CreateCategoryUseCase_1 = require("../../application/usecases/category/CreateCategoryUseCase");
+const UpdateCategoryUseCase_1 = require("../../application/usecases/category/UpdateCategoryUseCase");
 tsyringe_1.container.registerSingleton('TaskRepository', FirestoreTaskRepository_1.FirestoreTaskRepository);
 tsyringe_1.container.registerSingleton('UserRepository', FirestoreUserRepository_1.FirestoreUserRepository);
+tsyringe_1.container.registerSingleton('CategoryRepository', FirestoreCategoryRepository_1.FirestoreCategoryRepository);
 tsyringe_1.container.registerSingleton(CreateTaskUseCase_1.CreateTaskUseCase);
 tsyringe_1.container.registerSingleton(UpdateTaskUseCase_1.UpdateTaskUseCase);
 tsyringe_1.container.registerSingleton(DeleteTaskUseCase_1.DeleteTaskUseCase);
 tsyringe_1.container.registerSingleton(GetTasksUseCase_1.GetTasksUseCase);
 tsyringe_1.container.registerSingleton(CreateUserUseCase_1.CreateUserUseCase);
 tsyringe_1.container.registerSingleton(FindUserUseCase_1.FindUserUseCase);
+tsyringe_1.container.registerSingleton(CreateCategoryUseCase_1.CreateCategoryUseCase);
+tsyringe_1.container.registerSingleton(UpdateCategoryUseCase_1.UpdateCategoryUseCase);
