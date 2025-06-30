@@ -13,8 +13,10 @@ function init() {
         return;
     }
     const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+    console.log('saPath', saPath);
     if (saPath && fs_1.default.existsSync(saPath)) {
-        const sa = JSON.parse(fs_1.default.readFileSync(saPath, 'utf8'));
+        const sa = require(saPath);
+        console.log('sa', sa);
         firebase_admin_1.default.initializeApp({ credential: firebase_admin_1.default.credential.cert(sa) });
         return;
     }

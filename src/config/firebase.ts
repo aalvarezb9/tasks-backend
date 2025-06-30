@@ -10,8 +10,10 @@ function init() {
   }
 
   const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  console.log('saPath', saPath);
   if (saPath && fs.existsSync(saPath)) {
-    const sa = JSON.parse(fs.readFileSync(saPath, 'utf8'));
+    const sa = require(saPath);
+    console.log('sa', sa);
     admin.initializeApp({ credential: admin.credential.cert(sa) });
     return;
   }
