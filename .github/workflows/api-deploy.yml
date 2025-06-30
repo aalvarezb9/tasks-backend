@@ -2,14 +2,13 @@ name: API CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   backend:
     runs-on: ubuntu-latest
     env:
-      NODE_VERSION: 20
       PROJECT_ID: tasks-collection-82ded
       GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa.json
 
@@ -17,31 +16,26 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+        with: { node-version: 20 }
 
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            **/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Write service-account
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$GOOGLE_APPLICATION_CREDENTIALS"
 
-      - name: Write service account key
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $GOOGLE_APPLICATION_CREDENTIALS
+      - name: Add GC creds to environment for next steps
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS" >> $GITHUB_ENV
 
       - name: Install Firebase CLI
         run: npm i -g firebase-tools
 
+      - name: Install deps & build
+        run: |
+          npm ci
+          npm run build
+
       - name: Set runtime secret
-        run: firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID --token "${{ secrets.FIREBASE_CI_TOKEN }}"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
+        run: |
+          firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID
 
       - name: Deploy Cloud Functions
-        run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}"
+        run: |
+          firebase deploy --only functions --project $PROJECT_ID --non-interactive
