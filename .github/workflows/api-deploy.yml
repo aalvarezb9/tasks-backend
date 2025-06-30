@@ -42,7 +42,9 @@ jobs:
         run: npm run build
 
       - name: Deploy Cloud Functions
-        run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}"
+        env:
+            GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
+        run: firebase deploy --only functions,hosting --project $PROJECT_ID
 
     env:
       NODE_VERSION: 20

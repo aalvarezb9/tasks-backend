@@ -32,6 +32,13 @@ function init() {
     return;
   }
 
+  const googleApplicationCredentials = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  console.log('googleApplicationCredentials', googleApplicationCredentials);
+  if (googleApplicationCredentials) {
+    admin.initializeApp({ credential: admin.credential.cert(googleApplicationCredentials) });
+    return;
+  }
+
   throw new Error('No Firebase credentials found');
 }
 

@@ -33,6 +33,12 @@ function init() {
         });
         return;
     }
+    const googleApplicationCredentials = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+    console.log('googleApplicationCredentials', googleApplicationCredentials);
+    if (googleApplicationCredentials) {
+        firebase_admin_1.default.initializeApp({ credential: firebase_admin_1.default.credential.cert(googleApplicationCredentials) });
+        return;
+    }
     throw new Error('No Firebase credentials found');
 }
 if (!(0, app_1.getApps)().length)
