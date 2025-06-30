@@ -10,6 +10,7 @@ function init() {
   }
 
   const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  console.log('process.env', process.env);
   console.log('saPath', saPath);
   if (saPath && fs.existsSync(saPath)) {
     const sa = require(saPath);

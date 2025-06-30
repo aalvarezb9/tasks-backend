@@ -13,6 +13,7 @@ function init() {
         return;
     }
     const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+    console.log('process.env', process.env);
     console.log('saPath', saPath);
     if (saPath && fs_1.default.existsSync(saPath)) {
         const sa = require(saPath);

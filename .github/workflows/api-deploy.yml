@@ -8,10 +8,6 @@ on:
 jobs:
   backend:
     runs-on: ubuntu-latest
-    env:
-      NODE_VERSION: 20
-      PROJECT_ID: tasks-collection-82ded
-      GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
 
     steps:
       - uses: actions/checkout@v4
@@ -47,3 +43,8 @@ jobs:
 
       - name: Deploy Cloud Functions
         run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}"
+
+    env:
+      NODE_VERSION: 20
+      PROJECT_ID: tasks-collection-82ded
+      GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
