@@ -4,29 +4,7 @@ import fs from 'fs';
 
 
 function init() {
-  if (process.env.FUNCTIONS_EMULATOR !== 'true' && process.env.K_SERVICE) {
-    admin.initializeApp();
-    return;
-  }
-
-  const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  console.log('process.env', process.env);
-  console.log('saPath', saPath);
-  if (saPath && fs.existsSync(saPath)) {
-    const sa = require(saPath);
-    console.log('sa', sa);
-    admin.initializeApp({ credential: admin.credential.cert(sa) });
-    return;
-  }
-
-  if (process.env.SA_JSON) {
-    admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(process.env.SA_JSON))
-    });
-    return;
-  }
-
-  throw new Error('No Firebase credentials found');
+  admin.initializeApp();
 }
 
 if (!getApps().length) init();
