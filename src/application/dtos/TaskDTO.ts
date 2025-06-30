@@ -1,4 +1,4 @@
-import { TaskStatus } from "../../domain/entities/Task";
+import { TaskStatus } from '../../domain/entities/Task';
 
 export interface TaskDTO {
   id: string;
@@ -6,6 +6,7 @@ export interface TaskDTO {
   description?: string;
   categoryId?: string;
   status: TaskStatus;
+  userId: string;
   createdAt: string;
   updatedAt: string;
 }

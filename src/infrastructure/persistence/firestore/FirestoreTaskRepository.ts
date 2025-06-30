@@ -19,7 +19,7 @@ export class FirestoreTaskRepository implements TaskRepository {
     const totalSnap = await tasksCollection.get();
 
     return {
-      tasks: snap.docs.map((d) => fromDoc(d.data() as TaskDTO)),
+      tasks: snap.docs.map((d: any) => fromDoc(d.data() as TaskDTO)),
       total: totalSnap.size,
       page,
       limit,
@@ -38,6 +38,25 @@ export class FirestoreTaskRepository implements TaskRepository {
   async delete(id: TaskId) {
     await tasksCollection.doc(id.value).delete();
   }
+
+  async findByUserId(userId: string, p: Pagination): Promise<PaginatedTasks> {
+    const offset = (p.page - 1) * p.limit;
+    const snap = await tasksCollection
+      .where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .offset(offset)
+      .limit(p.limit)
+      .get();
+
+    const totalSnap = await tasksCollection.where('userId', '==', userId).get();
+
+    return {
+      tasks: snap.docs.map((d: any) => fromDoc(d.data() as TaskDTO)),
+      total: totalSnap.size,
+      page: p.page,
+      limit: p.limit,
+    };
+  }
 }
 
 const toDoc = (t: Task) => {
@@ -46,6 +65,8 @@ const toDoc = (t: Task) => {
     title: t.title,
     description: t.description,
     status: t.status,
+    categoryId: t.categoryId,
+    userId: t.userId,
     createdAt: t.createdAt.toISOString(),
     updatedAt: t.updatedAt.toISOString(),
   };
@@ -58,7 +79,7 @@ const toDoc = (t: Task) => {
 const fromDoc = (d: TaskDTO): Task =>
   Task.hydrate(
     d.id,
-    { title: d.title, description: d.description, categoryId: d.categoryId },
+    { title: d.title, description: d.description, categoryId: d.categoryId, userId: d.userId },
     d.status,
     d.createdAt,
     d.updatedAt

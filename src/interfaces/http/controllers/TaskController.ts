@@ -18,14 +18,14 @@ export class TaskController {
   static async list(req: Request, res: Response) {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
-    const result = await this.listUC.execute({ page, limit });
+    const result = await this.listUC.execute({ page, limit }, (req as any).userId);
     res.json(result);
   }
 
   @CatchErrors
   @RequireAuth
   static async create(req: Request, res: Response) {
-    const t = await this.createUC.execute(req.body);
+    const t = await this.createUC.execute(req.body, (req as any).userId);
     res.status(201).json(t);
   }
 

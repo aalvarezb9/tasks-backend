@@ -14,8 +14,17 @@ class Category {
     update(props) {
         this.props = { ...this.props, ...props };
     }
-    get name() { return this.props.name; }
-    get color() { return this.props.color; }
-    get createdAt() { return this._createdAt; }
+    static hydrate(id, props, createdAt) {
+        return new Category(CategoryId_1.CategoryId.from(id), props, typeof createdAt === 'string' ? new Date(createdAt) : createdAt);
+    }
+    get name() {
+        return this.props.name;
+    }
+    get color() {
+        return this.props.color;
+    }
+    get createdAt() {
+        return this._createdAt;
+    }
 }
 exports.Category = Category;

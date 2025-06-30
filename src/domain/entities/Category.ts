@@ -1,5 +1,8 @@
 import { CategoryId } from '../value-objects/CategoryId';
-export interface CategoryProps { name: string; color?: string; }   // color es opcional
+export interface CategoryProps {
+  name: string;
+  color?: string;
+} // color es opcional
 
 export class Category {
   private constructor(
@@ -16,7 +19,23 @@ export class Category {
     this.props = { ...this.props, ...props };
   }
 
-  get name() { return this.props.name; }
-  get color() { return this.props.color; }
-  get createdAt() { return this._createdAt; }
+  static hydrate(id: string, props: CategoryProps, createdAt: string | Date) {
+    return new Category(
+      CategoryId.from(id),
+      props,
+      typeof createdAt === 'string' ? new Date(createdAt) : createdAt
+    );
+  }
+
+  get name() {
+    return this.props.name;
+  }
+
+  get color() {
+    return this.props.color;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
 }

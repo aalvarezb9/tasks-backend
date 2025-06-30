@@ -21,11 +21,11 @@ class TaskController {
     static async list(req, res) {
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
-        const result = await this.listUC.execute({ page, limit });
+        const result = await this.listUC.execute({ page, limit }, req.userId);
         res.json(result);
     }
     static async create(req, res) {
-        const t = await this.createUC.execute(req.body);
+        const t = await this.createUC.execute(req.body, req.userId);
         res.status(201).json(t);
     }
     static async update(req, res) {

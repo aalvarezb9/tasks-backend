@@ -18,10 +18,10 @@ let GetTasksUseCase = class GetTasksUseCase {
     constructor(repo) {
         this.repo = repo;
     }
-    async execute(query = {}) {
+    async execute(query = {}, userId) {
         const page = query.page && query.page > 0 ? query.page : 1;
         const limit = query.limit && query.limit > 0 ? query.limit : 10;
-        const { tasks, total } = await this.repo.findAll({ page, limit });
+        const { tasks, total } = await this.repo.findByUserId(userId, { page, limit });
         return {
             tasks: tasks.map((t) => ({
                 id: t.id.value,
@@ -29,6 +29,7 @@ let GetTasksUseCase = class GetTasksUseCase {
                 description: t.description,
                 categoryId: t.categoryId,
                 status: t.status,
+                userId: t.userId,
                 createdAt: t.createdAt.toISOString(),
                 updatedAt: t.updatedAt.toISOString(),
             })),

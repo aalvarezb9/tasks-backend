@@ -5,6 +5,6 @@ const toDTO = (c) => ({
     id: c.id.value,
     name: c.name,
     color: c.color,
-    createdAt: c.createdAt.toISOString()
+    createdAt: c.createdAt.toISOString(),
 });
 exports.toDTO = toDTO;

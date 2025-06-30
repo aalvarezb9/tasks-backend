@@ -23,7 +23,7 @@ let ListCategoriesUseCase = class ListCategoriesUseCase {
         const limit = p.limit && p.limit > 0 ? p.limit : 10;
         const { categories, total } = await this.repo.findAll({ page, limit });
         return {
-            categories: categories.map(c => ({
+            categories: categories.map((c) => ({
                 id: c.id.value,
                 name: c.name,
                 color: c.color,

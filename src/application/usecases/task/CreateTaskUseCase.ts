@@ -7,8 +7,8 @@ import { Task } from '../../../domain/entities/Task';
 export class CreateTaskUseCase {
   constructor(@inject('TaskRepository') private readonly repo: TaskRepository) {}
 
-  async execute(cmd: CreateTaskCommand): Promise<TaskDTO> {
-    const task = Task.create(cmd);
+  async execute(cmd: CreateTaskCommand, userId: string): Promise<TaskDTO> {
+    const task = Task.create({ ...cmd, userId });
     await this.repo.save(task);
     return toDTO(task);
   }
@@ -19,6 +19,7 @@ const toDTO = (t: Task): TaskDTO => ({
   description: t.description,
   categoryId: t.categoryId,
   status: t.status,
+  userId: t.userId,
   createdAt: t.createdAt.toISOString(),
   updatedAt: t.updatedAt.toISOString(),
 });

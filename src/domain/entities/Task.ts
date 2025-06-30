@@ -7,6 +7,7 @@ export interface TaskProps {
   title: string;
   description?: string;
   categoryId?: string;
+  userId: string;
 }
 
 export class Task {
@@ -19,8 +20,8 @@ export class Task {
     private _updatedAt: Date
   ) {}
 
-  static create(p: TaskProps): Task {
-    const t = new Task(TaskId.create(), p, 'pending', new Date(), new Date());
+  static create(p: Omit<TaskProps, 'userId'> & { userId: string }): Task {
+    const t = new Task(TaskId.create(), { ...p }, 'pending', new Date(), new Date());
     t.addEvent(new TaskCreated(t.id));
     return t;
   }
@@ -41,6 +42,10 @@ export class Task {
 
   get categoryId() {
     return this.props.categoryId;
+  }
+
+  get userId() {
+    return this.props.userId;
   }
 
   get status() {

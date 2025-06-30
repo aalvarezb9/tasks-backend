@@ -17,7 +17,7 @@ export class LoginUserUseCase {
     }
 
     const token = jwt.sign({ sub: user.id.value, email: user.email.value }, env.jwtSecret, {
-      expiresIn: '1h',
+      expiresIn: '5h',
     });
 
     return { token };

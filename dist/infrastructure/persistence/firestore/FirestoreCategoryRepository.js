@@ -8,10 +8,10 @@ class FirestoreCategoryRepository {
     async findAll(p) {
         const snap = await categoriesCollection.orderBy('name').get();
         return {
-            categories: snap.docs.map(d => fromDoc(d.data())),
+            categories: snap.docs.map((d) => fromDoc(d.data())),
             total: snap.size,
             page: p.page,
-            limit: p.limit
+            limit: p.limit,
         };
     }
     async findById(id) {
@@ -30,6 +30,6 @@ const toDoc = (c) => ({
     id: c.id.value,
     name: c.name,
     color: c.color,
-    createdAt: c.createdAt.toISOString()
+    createdAt: c.createdAt.toISOString(),
 });
-const fromDoc = (d) => Category_1.Category.create({ name: d.name, color: d.color });
+const fromDoc = (d) => Category_1.Category.hydrate(d.id, { name: d.name, color: d.color }, d.createdAt);

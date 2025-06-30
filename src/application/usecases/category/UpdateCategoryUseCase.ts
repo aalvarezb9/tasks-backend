@@ -1,9 +1,9 @@
-import { inject, injectable } from "tsyringe";
-import { CategoryRepository } from "../../../domain/repositories/CategoryRepository";
-import { UpdateCategoryCommand } from "../../commands/UpdateCategoryCommand";
-import { CategoryDTO } from "../../dtos/CategoryDTO";
-import { CategoryId } from "../../../domain/value-objects/CategoryId";
-import { toDTO } from "./helpers/toDto";
+import { inject, injectable } from 'tsyringe';
+import { CategoryRepository } from '../../../domain/repositories/CategoryRepository';
+import { UpdateCategoryCommand } from '../../commands/UpdateCategoryCommand';
+import { CategoryDTO } from '../../dtos/CategoryDTO';
+import { CategoryId } from '../../../domain/value-objects/CategoryId';
+import { toDTO } from './helpers/toDto';
 
 @injectable()
 export class UpdateCategoryUseCase {

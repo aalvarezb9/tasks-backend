@@ -11,6 +11,8 @@ export function RequireAuth(_t: unknown, _p: string, desc: PropertyDescriptor) {
     if (!token) return res.status(401).json({ message: 'Missing token' });
 
     try {
+      const payload = jwt.verify(token, env.jwtSecret) as { sub: string };
+      (req as any).userId = payload.sub;
       jwt.verify(token, env.jwtSecret);
       return original.apply(this, args);
     } catch {

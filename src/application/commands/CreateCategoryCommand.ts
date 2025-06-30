@@ -1,1 +1,4 @@
-export interface CreateCategoryCommand { name: string; color?: string; }
+export interface CreateCategoryCommand {
+  name: string;
+  color?: string;
+}

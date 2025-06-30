@@ -10,10 +10,10 @@ export class FirestoreCategoryRepository implements CategoryRepository {
   async findAll(p: Pagination) {
     const snap = await categoriesCollection.orderBy('name').get();
     return {
-      categories: snap.docs.map(d => fromDoc(d.data())),
+      categories: snap.docs.map((d) => fromDoc(d.data())),
       total: snap.size,
       page: p.page,
-      limit: p.limit
+      limit: p.limit,
     };
   }
 
@@ -35,8 +35,7 @@ const toDoc = (c: Category) => ({
   id: c.id.value,
   name: c.name,
   color: c.color,
-  createdAt: c.createdAt.toISOString()
+  createdAt: c.createdAt.toISOString(),
 });
 
-const fromDoc = (d: any): Category =>
-Category.create({ name: d.name, color: d.color });
+const fromDoc = (d: any): Category => Category.hydrate(d.id, { name: d.name, color: d.color }, d.createdAt);

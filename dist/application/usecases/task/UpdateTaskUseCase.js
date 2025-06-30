@@ -31,6 +31,7 @@ let UpdateTaskUseCase = class UpdateTaskUseCase {
             description: task.description,
             categoryId: task.categoryId,
             status: task.status,
+            userId: task.userId,
             createdAt: task.createdAt.toISOString(),
             updatedAt: task.updatedAt.toISOString(),
         };

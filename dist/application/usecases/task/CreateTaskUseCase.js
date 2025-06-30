@@ -19,8 +19,8 @@ let CreateTaskUseCase = class CreateTaskUseCase {
     constructor(repo) {
         this.repo = repo;
     }
-    async execute(cmd) {
-        const task = Task_1.Task.create(cmd);
+    async execute(cmd, userId) {
+        const task = Task_1.Task.create({ ...cmd, userId });
         await this.repo.save(task);
         return toDTO(task);
     }
@@ -37,6 +37,7 @@ const toDTO = (t) => ({
     description: t.description,
     categoryId: t.categoryId,
     status: t.status,
+    userId: t.userId,
     createdAt: t.createdAt.toISOString(),
     updatedAt: t.updatedAt.toISOString(),
 });
