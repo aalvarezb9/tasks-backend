@@ -14,11 +14,9 @@ jobs:
       GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa.json
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -30,22 +28,20 @@ jobs:
             **/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build API
-        run: npm run build
-
       - name: Write service account key
-        shell: bash
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$GOOGLE_APPLICATION_CREDENTIALS"
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $GOOGLE_APPLICATION_CREDENTIALS
 
       - name: Install Firebase CLI
         run: npm i -g firebase-tools
 
+      - name: Set runtime secret
+        run: firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID --token "${{ secrets.FIREBASE_CI_TOKEN }}"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
       - name: Deploy Cloud Functions
-        run: >
-          firebase deploy
-          --only functions
-          --project $PROJECT_ID
-          --non-interactive
+        run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}"
