@@ -8,6 +8,10 @@ on:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: 20
+      PROJECT_ID: tasks-collection-82ded
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase-sa.json
 
     steps:
       - uses: actions/checkout@v4
@@ -16,37 +20,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            **/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $GOOGLE_APPLICATION_CREDENTIALS
 
-      - name: Write service account key
-        env:
-            FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KET }}
-        run: echo "$FIREBASE_SERVICE_ACCOUNT_KEY" > firebase-service-account.json
+      - run: npm i -g firebase-tools
 
-      - name: Install Firebase CLI
-        run: npm i -g firebase-tools
+      - run: firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID --token "${{ secrets.FIREBASE_CI_TOKEN }}"
 
-      - name: Set runtime secret
-        run: firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID --token "${{ secrets.FIREBASE_CI_TOKEN }}"
+      - run: npm ci
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm run build
 
-      - name: Build
-        run: npm run build
-
-      - name: Deploy Cloud Functions
-        env:
-            GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
-        run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}"
-
-    env:
-      NODE_VERSION: 20
-      PROJECT_ID: tasks-collection-82ded
-      GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
+      - run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}"
