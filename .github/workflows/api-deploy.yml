@@ -44,7 +44,7 @@ jobs:
       - name: Deploy Cloud Functions
         env:
             GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
-        run: firebase deploy --only functions --project $PROJECT_ID
+        run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}"
 
     env:
       NODE_VERSION: 20
