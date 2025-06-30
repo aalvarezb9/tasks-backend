@@ -8,35 +8,25 @@ const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const app_1 = require("firebase-admin/app");
 const fs_1 = __importDefault(require("fs"));
 function init() {
+    if (process.env.FIREBASE_CONFIG) { // Cloud Functions ― análisis y runtime
+        firebase_admin_1.default.initializeApp();
+        return;
+    }
     const functionsEmulator = process.env.FUNCTIONS_EMULATOR;
     const kService = process.env.K_SERVICE;
-    console.log('functionsEmulator', functionsEmulator);
-    console.log('kService', kService);
     if (functionsEmulator !== 'true' && kService) {
         firebase_admin_1.default.initializeApp();
         return;
     }
     const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-    console.log('process.env', process.env);
-    console.log('saPath', saPath);
     if (saPath && fs_1.default.existsSync(saPath)) {
-        const sa = require(saPath);
-        console.log('sa', sa);
-        firebase_admin_1.default.initializeApp({ credential: firebase_admin_1.default.credential.cert(sa) });
+        firebase_admin_1.default.initializeApp({ credential: firebase_admin_1.default.credential.cert(require(saPath)) });
         return;
     }
-    const saJson = process.env.SA_JSON;
-    console.log('saJson', saJson);
-    if (saJson) {
+    if (process.env.SA_JSON) {
         firebase_admin_1.default.initializeApp({
-            credential: firebase_admin_1.default.credential.cert(JSON.parse(saJson))
+            credential: firebase_admin_1.default.credential.cert(JSON.parse(process.env.SA_JSON))
         });
-        return;
-    }
-    const googleApplicationCredentials = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-    console.log('googleApplicationCredentials', googleApplicationCredentials);
-    if (googleApplicationCredentials) {
-        firebase_admin_1.default.initializeApp({ credential: firebase_admin_1.default.credential.cert(googleApplicationCredentials) });
         return;
     }
     throw new Error('No Firebase credentials found');

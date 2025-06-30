@@ -4,43 +4,34 @@ import fs from 'fs';
 
 
 function init() {
+  if (process.env.FIREBASE_CONFIG) {        // Cloud Functions ― análisis y runtime
+    admin.initializeApp();
+    return;
+  }
+
   const functionsEmulator = process.env.FUNCTIONS_EMULATOR;
   const kService = process.env.K_SERVICE;
-  console.log('functionsEmulator', functionsEmulator);
-  console.log('kService', kService);
   if (functionsEmulator !== 'true' && kService) {
     admin.initializeApp();
     return;
   }
 
   const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  console.log('process.env', process.env);
-  console.log('saPath', saPath);
   if (saPath && fs.existsSync(saPath)) {
-    const sa = require(saPath);
-    console.log('sa', sa);
-    admin.initializeApp({ credential: admin.credential.cert(sa) });
+    admin.initializeApp({ credential: admin.credential.cert(require(saPath)) });
     return;
   }
 
-  const saJson = process.env.SA_JSON;
-  console.log('saJson', saJson);
-  if (saJson) {
+  if (process.env.SA_JSON) {
     admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(saJson))
+      credential: admin.credential.cert(JSON.parse(process.env.SA_JSON))
     });
-    return;
-  }
-
-  const googleApplicationCredentials = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  console.log('googleApplicationCredentials', googleApplicationCredentials);
-  if (googleApplicationCredentials) {
-    admin.initializeApp({ credential: admin.credential.cert(googleApplicationCredentials) });
     return;
   }
 
   throw new Error('No Firebase credentials found');
 }
+
 
 if (!getApps().length) init();
 
