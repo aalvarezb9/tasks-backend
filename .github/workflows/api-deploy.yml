@@ -12,6 +12,7 @@ jobs:
       NODE_VERSION: 20
       PROJECT_ID: tasks-collection-82ded
       GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase-sa.json
+      NODE_ENV: production
 
     steps:
       - uses: actions/checkout@v4

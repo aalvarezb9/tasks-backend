@@ -71,3 +71,4 @@ node_modules/
 .dataconnect
 
 firebase-debug.log*
+.runtimeconfig.json

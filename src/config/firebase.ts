@@ -1,8 +1,17 @@
 import admin from 'firebase-admin';
 import { getApps } from 'firebase-admin/app';
 import fs from 'fs';
+import { env } from './env';
+
 
 function init() {
+  const environment = env.environment;
+  if (environment === 'dev') {
+    const credentials = require(env.keyRoute);
+    admin.initializeApp({ credential: admin.credential.cert(credentials) });
+    return;
+  }
+
   const functionsEmulator = process.env.FUNCTIONS_EMULATOR;
   const kService = process.env.K_SERVICE;
   
@@ -32,6 +41,8 @@ function init() {
     throw new Error('No Firebase credentials found');
   }
 }
+
+console.log('acá')
 
 if (!getApps().length) init();
 
