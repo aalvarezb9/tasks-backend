@@ -1,18 +1,8 @@
 import admin from 'firebase-admin';
-import { getApps, ServiceAccount } from 'firebase-admin/app';
+import { getApps } from 'firebase-admin/app';
 import fs from 'fs';
 
-
 function init() {
-  const firebaseConfig = process.env.FIREBASE_CONFIG;
-  console.log('firebaseConfig', firebaseConfig);
-  if (firebaseConfig) {
-    admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(firebaseConfig))
-    });
-    return;
-  }
-
   const functionsEmulator = process.env.FUNCTIONS_EMULATOR;
   const kService = process.env.K_SERVICE;
   if (functionsEmulator !== 'true' && kService) {
@@ -21,21 +11,23 @@ function init() {
   }
 
   const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  console.log('saPath', saPath);
   if (saPath && fs.existsSync(saPath)) {
     admin.initializeApp({ credential: admin.credential.cert(require(saPath)) });
     return;
   }
 
-  if (process.env.SA_JSON) {
+  const saJson = process.env.SA_JSON;
+  console.log('saJson', saJson);
+  if (saJson) {
     admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(process.env.SA_JSON))
+      credential: admin.credential.cert(JSON.parse(process.env.SA_JSON as string))
     });
     return;
   }
 
   throw new Error('No Firebase credentials found');
 }
-
 
 if (!getApps().length) init();
 

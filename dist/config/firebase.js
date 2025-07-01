@@ -8,14 +8,6 @@ const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const app_1 = require("firebase-admin/app");
 const fs_1 = __importDefault(require("fs"));
 function init() {
-    const firebaseConfig = process.env.FIREBASE_CONFIG;
-    console.log('firebaseConfig', firebaseConfig);
-    if (firebaseConfig) {
-        firebase_admin_1.default.initializeApp({
-            credential: firebase_admin_1.default.credential.cert(JSON.parse(firebaseConfig))
-        });
-        return;
-    }
     const functionsEmulator = process.env.FUNCTIONS_EMULATOR;
     const kService = process.env.K_SERVICE;
     if (functionsEmulator !== 'true' && kService) {
@@ -23,11 +15,14 @@ function init() {
         return;
     }
     const saPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+    console.log('saPath', saPath);
     if (saPath && fs_1.default.existsSync(saPath)) {
         firebase_admin_1.default.initializeApp({ credential: firebase_admin_1.default.credential.cert(require(saPath)) });
         return;
     }
-    if (process.env.SA_JSON) {
+    const saJson = process.env.SA_JSON;
+    console.log('saJson', saJson);
+    if (saJson) {
         firebase_admin_1.default.initializeApp({
             credential: firebase_admin_1.default.credential.cert(JSON.parse(process.env.SA_JSON))
         });
