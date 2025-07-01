@@ -8,8 +8,12 @@ const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const app_1 = require("firebase-admin/app");
 const fs_1 = __importDefault(require("fs"));
 function init() {
-    if (process.env.FIREBASE_CONFIG) { // Cloud Functions ― análisis y runtime
-        firebase_admin_1.default.initializeApp();
+    const firebaseConfig = process.env.FIREBASE_CONFIG;
+    console.log('firebaseConfig', firebaseConfig);
+    if (firebaseConfig) {
+        firebase_admin_1.default.initializeApp({
+            credential: firebase_admin_1.default.credential.cert(JSON.parse(firebaseConfig))
+        });
         return;
     }
     const functionsEmulator = process.env.FUNCTIONS_EMULATOR;

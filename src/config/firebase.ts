@@ -4,8 +4,12 @@ import fs from 'fs';
 
 
 function init() {
-  if (process.env.FIREBASE_CONFIG) {        // Cloud Functions ― análisis y runtime
-    admin.initializeApp();
+  const firebaseConfig = process.env.FIREBASE_CONFIG;
+  console.log('firebaseConfig', firebaseConfig);
+  if (firebaseConfig) {
+    admin.initializeApp({
+      credential: admin.credential.cert(JSON.parse(firebaseConfig))
+    });
     return;
   }
 
