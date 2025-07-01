@@ -24,13 +24,10 @@ jobs:
 
       - run: npm i -g firebase-tools
 
-      - run: firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID
-
-      - name: Verify config was set
-        run: firebase functions:config:get --project $PROJECT_ID
+      - run: firebase functions:config:set jwt.secret="${{ secrets.JWT_SECRET }}" --project $PROJECT_ID --token "${{ secrets.FIREBASE_CI_TOKEN }}"
 
       - run: npm ci
 
       - run: npm run build
 
-      - run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --force
+      - run: firebase deploy --only functions --project $PROJECT_ID --non-interactive --token "${{ secrets.FIREBASE_CI_TOKEN }}" --force
