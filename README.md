@@ -1,6 +1,34 @@
 # tasks-backend
 
-API de gestión de tareas con Node.js, TypeScript, Express y Firebase Cloud Functions. Aplica DDD, repositorios, inyección de dependencias, JWT y emulador de Firestore.
+API de gestión de tareas con Node.js, TypeScript, Express y Firebase Cloud Functions.
+Aplica DDD (Domain-Driven Design), arquitectura limpia, principios SOLID, repositorios, inyección de dependencias, JWT para autenticación y emuladores de Firestore para desarrollo local.
+
+---
+
+## Decisiones de diseño
+
+- **Arquitectura Hexagonal / DDD**: Separación clara en capas (dominio, aplicación, infraestructura, interfaces) para facilitar mantenibilidad y escalabilidad.
+- **Inyección de dependencias (tsyringe)**: Evita acoplamientos, facilita tests y mocking.
+- **Repositorios + Factories**: Centralizan la persistencia, permiten cambiar la fuente de datos sin tocar la lógica de negocio.
+- **Patrón DTO**: Data Transfer Objects para validar y transformar datos entre capas.
+- **Decoradores**: `@CatchErrors` para manejo uniforme de errores y `@RequireAuth` para controlar rutas protegidas.
+- **JWT**: Autenticación stateless con tokens firmados y expiración configurada.
+- **Firestore**: Base de datos NoSQL, uso de índices compuestos para consultas eficientes.
+
+## Tecnologías utilizadas
+
+- **Node.js 20**: Runtime moderno con soporte LTS.
+- **TypeScript**: Tipado estático, interfaces, generics.
+- **Express**: Framework HTTP minimalista.
+- **Firebase Cloud Functions (GCFv2)**: Despliegue serverless en Google Cloud.
+- **Firebase Firestore**: Almacenamiento de documentos, emulador local.
+- **tsyringe**: Contenedor IoC para inyección de dependencias.
+- **bcryptjs**: Hash de contraseñas.
+- **jsonwebtoken**: Generación y verificación de JWT.
+- **express-validator**: Validación de peticiones.
+- **Jest**: Pruebas unitarias.
+- **ESLint + Prettier**: Calidad y formateo de código.
+- **GitHub Actions**: CI/CD para tests, build y despliegue.
 
 ---
 
@@ -15,7 +43,7 @@ API de gestión de tareas con Node.js, TypeScript, Express y Firebase Cloud Func
 
 ```ini
 JWT_SECRET=TuSecretoJWT
-KEYS_ROUTE='path/to/google_keys.json  '
+KEYS_ROUTE='path/to/keys.json'
 ENVIRONMENT=dev
 ```
 
@@ -29,15 +57,17 @@ npm ci
 
 Copiar `.env.example` a `.env` y completar las variables.
 
-## Emuladores locales
+## Compilación y escucha de cambios
 
-En una terminal ejecutar
+En una terminal, ejecuta el comando
 
 ```bash
 npm run watch:ts
 ```
 
-Luego, en otra
+## Emuladores locales
+
+Luego, en otra terminal, ejecuta
 
 ```bash
 npm run emul
@@ -61,9 +91,9 @@ npm test
 
 | Name                       | Value                                  |
 | -------------------------- | -------------------------------------- |
-| FIREBASE\_SERVICE\_ACCOUNT | JSON de la cuenta de servicio clave    |
-| FIREBASE\_CI\_TOKEN        | Token generado con `firebase login:ci` |
-| JWT\_SECRET                | El mismo valor que en `.env`           |
+| FIREBASE_SERVICE_ACCOUNT   | JSON de la cuenta de servicio clave    |
+| FIREBASE_CI_TOKEN          | Token generado con `firebase login:ci` |
+| JWT_SECRET                 | El mismo valor que en `.env`           |
 
 ### Workflow: `.github/workflows/api-deploy.yml`
 
